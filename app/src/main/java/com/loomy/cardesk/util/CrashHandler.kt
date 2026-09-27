@@ -52,7 +52,7 @@ object CrashHandler {
         try {
             val dir = ctx.filesDir
             dir.mkdirs()
-            block(FileWriter(File(dir, fileName), true).buffered())
+            block(FileWriter(File(dir, fileName), true))
         } catch (e: Exception) {
         }
         // 外部目录（车机上 MT管理器直接可看）
@@ -60,7 +60,7 @@ object CrashHandler {
             val dir = ctx.getExternalFilesDir(null)
             if (dir != null) {
                 dir.mkdirs()
-                block(FileWriter(File(dir, fileName), true).buffered())
+                block(FileWriter(File(dir, fileName), true))
             }
         } catch (e: Exception) {
         }
