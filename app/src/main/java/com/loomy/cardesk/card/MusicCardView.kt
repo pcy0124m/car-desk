@@ -55,7 +55,8 @@ class MusicCardView @JvmOverloads constructor(
     /** 刷新曲目信息与播放状态 */
     fun refresh() {
         val c = controller
-        val playing = c?.playbackState?.isPlaying == true
+        // 原生 PlaybackState 没有 isPlaying 属性，用 STATE_PLAYING 状态判断
+        val playing = c?.playbackState?.state == android.media.session.PlaybackState.STATE_PLAYING
         val metadata = c?.metadata
 
         // 标题：优先媒体元数据（曲名），否则显示绑定的应用名
@@ -98,7 +99,7 @@ class MusicCardView @JvmOverloads constructor(
             boundPkg?.let { AppUtil.launchApp(context, it) }
             return
         }
-        val playing = c.playbackState.isPlaying
+        val playing = c.playbackState.state == android.media.session.PlaybackState.STATE_PLAYING
         if (playing) c.transportControls.pause() else c.transportControls.play()
     }
 

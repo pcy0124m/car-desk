@@ -296,7 +296,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun inputAddress(title: String, key: String) {
         val et = EditText(this).apply {
-            setText(DeskConfig.getStr(this, key) ?: "")
+            // 注意：apply 块内 this 指向 EditText，取配置必须显式用 this@MainActivity
+            setText(DeskConfig.getStr(this@MainActivity, key) ?: "")
             hint = "输入地址或地名，如：朝阳区望京SOHO"
         }
         AlertDialog.Builder(this)
