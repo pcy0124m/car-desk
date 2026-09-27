@@ -95,11 +95,13 @@ class MusicCardView @JvmOverloads constructor(
     /** 点击播放/暂停：无会话启动应用，有会话控制播放 */
     fun playPause() {
         val c = controller
-        if (c?.playbackState == null) {
+        // 存局部变量：Java getter 属性无法 smart cast
+        val state = c?.playbackState
+        if (state == null) {
             boundPkg?.let { AppUtil.launchApp(context, it) }
             return
         }
-        val playing = c.playbackState.state == android.media.session.PlaybackState.STATE_PLAYING
+        val playing = state.state == android.media.session.PlaybackState.STATE_PLAYING
         if (playing) c.transportControls.pause() else c.transportControls.play()
     }
 
