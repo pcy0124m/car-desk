@@ -45,7 +45,7 @@ dependencies {
     implementation("androidx.recyclerview:recyclerview:1.3.2")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     // 高德 3D 地图 SDK（车机横屏实时地图）
+    // 注意：3dmap 9.x 起已内置定位能力（com.amap.api.location.*），
+    // 不要再单独引入 location 依赖，否则 Duplicate class 编译失败
     implementation("com.amap.api:3dmap:9.8.3")
-    // 高德定位 SDK（让地图跟着车走）
-    implementation("com.amap.api:location:6.4.3")
 }
