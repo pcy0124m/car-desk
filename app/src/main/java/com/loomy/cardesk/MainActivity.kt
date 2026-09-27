@@ -33,6 +33,7 @@ import com.loomy.cardesk.drawer.AppDrawerActivity
 import com.loomy.cardesk.map.MapManager
 import com.loomy.cardesk.util.AppInfo
 import com.loomy.cardesk.util.AppUtil
+import com.loomy.cardesk.util.CrashHandler
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -64,6 +65,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 黑匣子：先装崩溃捕获器，闪退也能留下堆栈日志
+        CrashHandler.install(this)
         setContentView(R.layout.activity_main)
 
         initViews()
@@ -98,7 +101,11 @@ class MainActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         mapManager.onDestroy()
-        unregisterReceiver(batteryReceiver)
+        try {
+            unregisterReceiver(batteryReceiver)
+        } catch (e: Exception) {
+            // 注册失败导致的未注册反注册，忽略
+        }
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -433,7 +440,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun registerBatteryReceiver() {
-        registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        try {
+            registerReceiver(batteryReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+        } catch (e: Exception) {
+            // 部分定制 ROM 对动态广播注册要求更严，失败就跳过电量显示，不闪退
+        }
     }
 
     private val batteryReceiver = object : BroadcastReceiver() {

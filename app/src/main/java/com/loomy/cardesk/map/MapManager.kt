@@ -36,30 +36,47 @@ class MapManager(private val context: Context) {
         return key.isNotBlank() && !key.contains("REPLACE_WITH")
     }
 
-    /** 创建 MapView 挂进容器（Key 有效时） */
+    /** 创建 MapView 挂进容器（Key 有效时）；任何异常都不允许拖垮桌面 */
     fun attach(container: FrameLayout) {
         if (!isKeyConfigured()) return
-        mapView = MapView(context)
-        container.addView(
-            mapView,
-            0,
-            FrameLayout.LayoutParams(
-                FrameLayout.LayoutParams.MATCH_PARENT,
-                FrameLayout.LayoutParams.MATCH_PARENT
+        try {
+            mapView = MapView(context)
+            container.addView(
+                mapView,
+                0,
+                FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT
+                )
             )
-        )
-        aMap = mapView?.map
-        aMap?.uiSettings?.isZoomControlsEnabled = false // 用自己的悬浮缩放按钮
-        aMap?.uiSettings?.isCompassEnabled = true
-        aMap?.isMyLocationEnabled = true               // 显示蓝点
+            aMap = mapView?.map
+            aMap?.uiSettings?.isZoomControlsEnabled = false // 用自己的悬浮缩放按钮
+            aMap?.uiSettings?.isCompassEnabled = true
+            aMap?.isMyLocationEnabled = true               // 显示蓝点
+        } catch (e: Throwable) {
+            // 地图初始化失败（Key 无效 / so 缺失 / ROM 兼容等）：
+            // 移除地图视图，保证桌面其余功能照常
+            try {
+                container.removeView(mapView)
+            } catch (ignore: Throwable) {
+            }
+            mapView = null
+            aMap = null
+        }
     }
 
     fun zoomIn() {
-        aMap?.animateCamera(CameraUpdateFactory.zoomIn())
+        try {
+            aMap?.animateCamera(CameraUpdateFactory.zoomIn())
+        } catch (e: Throwable) {
+        }
     }
 
     fun zoomOut() {
-        aMap?.animateCamera(CameraUpdateFactory.zoomOut())
+        try {
+            aMap?.animateCamera(CameraUpdateFactory.zoomOut())
+        } catch (e: Throwable) {
+        }
     }
 
     /**
@@ -71,15 +88,19 @@ class MapManager(private val context: Context) {
         try {
             locationClient = AMapLocationClient(context)
             locationClient?.setLocationListener { loc ->
-                if (loc != null && loc.latitude != 0.0 && loc.longitude != 0.0) {
-                    aMap?.animateCamera(
-                        CameraUpdateFactory.newLatLngZoom(
-                            LatLng(loc.latitude, loc.longitude), 16f
+                try {
+                    if (loc != null && loc.latitude != 0.0 && loc.longitude != 0.0) {
+                        aMap?.animateCamera(
+                            CameraUpdateFactory.newLatLngZoom(
+                                LatLng(loc.latitude, loc.longitude), 16f
+                            )
                         )
-                    )
-                    onFirstFix(loc.latitude, loc.longitude)
-                    // 定位一次后停掉省电；需要持续跟车可去掉这一行并改 option.interval
-                    locationClient?.stopLocation()
+                        onFirstFix(loc.latitude, loc.longitude)
+                        // 定位一次后停掉省电；需要持续跟车可去掉这一行并改 option.interval
+                        locationClient?.stopLocation()
+                    }
+                } catch (e: Throwable) {
+                    // 定位回调异常不影响主界面
                 }
             }
             val option = AMapLocationClientOption()
@@ -92,23 +113,39 @@ class MapManager(private val context: Context) {
     }
 
     // ---------- 生命周期委托（MainActivity 必须逐一对齐调用） ----------
+    // 高德 MapView 在异常 ROM 上生命周期回调也可能抛错，全部兜住
     fun onResume() {
-        mapView?.onResume()
+        try {
+            mapView?.onResume()
+        } catch (e: Throwable) {
+        }
     }
 
     fun onPause() {
-        mapView?.onPause()
+        try {
+            mapView?.onPause()
+        } catch (e: Throwable) {
+        }
     }
 
     fun onDestroy() {
-        locationClient?.stopLocation()
-        locationClient?.onDestroy()
+        try {
+            locationClient?.stopLocation()
+            locationClient?.onDestroy()
+        } catch (e: Throwable) {
+        }
         locationClient = null
-        mapView?.onDestroy()
+        try {
+            mapView?.onDestroy()
+        } catch (e: Throwable) {
+        }
         mapView = null
     }
 
     fun onSaveInstanceState(outState: Bundle) {
-        mapView?.onSaveInstanceState(outState)
+        try {
+            mapView?.onSaveInstanceState(outState)
+        } catch (e: Throwable) {
+        }
     }
 }
