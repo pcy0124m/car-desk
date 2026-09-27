@@ -19,6 +19,7 @@ object DeskConfig {
     const val KEY_MIC = "mic_pkg"               // 顶部麦克风按钮绑定应用
     const val KEY_PHONE = "phone_pkg"           // 顶部电话按钮绑定应用
     const val KEY_WEATHER = "weather_pkg"       // 天气卡绑定应用
+    const val KEY_MAP_ENABLED = "map_enabled"   // 地图模块开关（诊断期默认关）
 
     private const val KEY_DOCK = "dock_"        // dock_0 ~ dock_4 左侧快捷栏槽位
     private const val KEY_EXTRA_CARDS = "extra_cards" // 追加启动卡（逗号分隔包名）
@@ -52,5 +53,13 @@ object DeskConfig {
 
     fun setStr(context: Context, key: String, value: String?) {
         prefs(context).edit().putString(key, value).apply()
+    }
+
+    // ---------- 地图开关（诊断阶段默认关闭，确认稳定后再默认开启） ----------
+    fun mapEnabled(context: Context): Boolean =
+        prefs(context).getBoolean(KEY_MAP_ENABLED, false)
+
+    fun setMapEnabled(context: Context, enabled: Boolean) {
+        prefs(context).edit().putBoolean(KEY_MAP_ENABLED, enabled).apply()
     }
 }

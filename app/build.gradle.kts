@@ -11,8 +11,8 @@ android {
         applicationId = "com.loomy.cardesk"
         minSdk = 26
         targetSdk = 34
-        versionCode = 2
-        versionName = "1.0.1"
+        versionCode = 3
+        versionName = "1.0.2"
 
         // 高德地图 Key 从 gradle.properties 注入 Manifest
         // 这样 Key 不写在源码里，方便各机器/仓库切换

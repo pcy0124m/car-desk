@@ -12,4 +12,5 @@
     <string name="unbind">解除绑定</string>
     <string name="long_press_hint">长按卡片可更换应用</string>
     <string name="map_key_missing">高德 Key 未配置\n请按 README 申请后填入 gradle.properties</string>
+    <string name="map_disabled_hint">地图模块暂未启用（诊断版）\n桌面其余功能正常可用</string>
 </resources>

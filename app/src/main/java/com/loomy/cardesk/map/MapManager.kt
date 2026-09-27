@@ -36,8 +36,9 @@ class MapManager(private val context: Context) {
         return key.isNotBlank() && !key.contains("REPLACE_WITH")
     }
 
-    /** 创建 MapView 挂进容器（Key 有效时）；任何异常都不允许拖垮桌面 */
+    /** 创建 MapView 挂进容器；开关关闭 / Key 无效 / 任何异常都不允许拖垮桌面 */
     fun attach(container: FrameLayout) {
+        if (!com.loomy.cardesk.config.DeskConfig.mapEnabled(context)) return
         if (!isKeyConfigured()) return
         try {
             mapView = MapView(context)

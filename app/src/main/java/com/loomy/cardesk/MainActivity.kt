@@ -328,12 +328,20 @@ class MainActivity : AppCompatActivity() {
             .show()
     }
 
-    /** 右侧高德地图区 */
+    /** 右侧高德地图区（地图模块由开关控制，诊断阶段默认关闭） */
     private fun initMap() {
         val container = findViewById<FrameLayout>(R.id.mapContainer)
-        findViewById<View>(R.id.keyMissingHint).visibility =
-            if (mapManager.isKeyConfigured()) View.GONE else View.VISIBLE
-        mapManager.attach(container)
+        val hint = findViewById<View>(R.id.keyMissingHint)
+
+        if (!DeskConfig.mapEnabled(this)) {
+            // 诊断版：地图模块未启用，显示提示，避免高德 SDK 引发闪退
+            hint.visibility = View.VISIBLE
+            val hintText = findViewById<TextView>(R.id.keyMissingHintText)
+            if (hintText != null) hintText.text = getString(R.string.map_disabled_hint)
+        } else {
+            hint.visibility = View.GONE
+            mapManager.attach(container)
+        }
 
         findViewById<ImageView>(R.id.btnZoomIn).setOnClickListener { mapManager.zoomIn() }
         findViewById<ImageView>(R.id.btnZoomOut).setOnClickListener { mapManager.zoomOut() }
