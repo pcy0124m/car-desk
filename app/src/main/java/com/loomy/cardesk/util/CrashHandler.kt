@@ -9,32 +9,60 @@ import java.util.Date
 import java.util.Locale
 
 /**
- * 全局崩溃捕获器（黑匣子）：
- * 任何未捕获异常都会把完整堆栈写到
- *   /sdcard/Android/data/com.loomy.cardesk/files/crash.log
- * 车机上用 MT管理器 / 文件管理器即可打开查看，方便快速定位闪退原因。
+ * 全局崩溃捕获器 + 启动日志（双保险）：
+ *
+ * 1. crash.log：未捕获异常堆栈，双写到 内部私有目录 和 外部存储
+ *    - /data/data/com.loomy.cardesk/files/crash.log   （需 root，MT管理器可读）
+ *    - /sdcard/Android/data/com.loomy.cardesk/files/crash.log
+ * 2. boot.log：每次启动逐步记录执行到哪一步，即使不崩溃也能定位卡点
+ *    - 同样双写
  */
 object CrashHandler {
 
+    private var appContext: Context? = null
+
     fun install(context: Context) {
+        appContext = context.applicationContext
         val default = Thread.getDefaultUncaughtExceptionHandler()
         Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
-            try {
-                val dir = context.getExternalFilesDir(null)
-                if (dir != null) {
-                    dir.mkdirs()
-                    val logFile = File(dir, "crash.log")
-                    FileWriter(logFile, true).use { w ->
-                        w.appendLine("==== ${SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault()).format(Date())} ====")
-                        w.appendLine("Thread: ${thread.name}")
-                        w.appendLine(Log.getStackTraceString(throwable))
-                        w.appendLine("")
-                    }
-                }
-            } catch (e: Exception) {
-                // 写日志失败也不影响原崩溃流程
+            writeLog("crash.log") { w ->
+                w.appendLine("==== CRASH ${now()} ====")
+                w.appendLine("Thread: ${thread.name}")
+                w.appendLine(Log.getStackTraceString(throwable))
+                w.appendLine("")
             }
             default?.uncaughtException(thread, throwable)
+        }
+    }
+
+    /** 启动/步骤标记：每次启动覆盖写入，记录执行进度 */
+    fun boot(context: Context, step: String) {
+        val ctx = appContext ?: context.applicationContext
+        writeLog("boot.log") { w ->
+            w.appendLine("${now()} [${step}]")
+        }
+    }
+
+    private fun now(): String =
+        SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS", Locale.getDefault()).format(Date())
+
+    private fun writeLog(fileName: String, block: (FileWriter) -> Unit) {
+        val ctx = appContext ?: return
+        // 内部目录（一定可写，需 root 查看）
+        try {
+            val dir = ctx.filesDir
+            dir.mkdirs()
+            block(FileWriter(File(dir, fileName), true).buffered())
+        } catch (e: Exception) {
+        }
+        // 外部目录（车机上 MT管理器直接可看）
+        try {
+            val dir = ctx.getExternalFilesDir(null)
+            if (dir != null) {
+                dir.mkdirs()
+                block(FileWriter(File(dir, fileName), true).buffered())
+            }
+        } catch (e: Exception) {
         }
     }
 }

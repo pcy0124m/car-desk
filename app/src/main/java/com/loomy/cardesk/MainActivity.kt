@@ -65,22 +65,32 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // 黑匣子：先装崩溃捕获器，闪退也能留下堆栈日志
         CrashHandler.install(this)
+        CrashHandler.boot(this, "MainActivity.onCreate:start")
         setContentView(R.layout.activity_main)
+        CrashHandler.boot(this, "setContentView:done")
 
         initViews()
+        CrashHandler.boot(this, "initViews:done")
         initDock()
+        CrashHandler.boot(this, "initDock:done")
         initCards()
+        CrashHandler.boot(this, "initCards:done")
         initTopBar()
+        CrashHandler.boot(this, "initTopBar:done")
         initSearchPanel()
+        CrashHandler.boot(this, "initSearchPanel:done")
         initMap()
+        CrashHandler.boot(this, "initMap:done")
         initExtraCards()
+        CrashHandler.boot(this, "initExtraCards:done")
         initWeather()
+        CrashHandler.boot(this, "initWeather:done")
 
         requestLocationPermission()
         registerBatteryReceiver()
         updateClock()
+        CrashHandler.boot(this, "onCreate:all-done")
     }
 
     override fun onResume() {
