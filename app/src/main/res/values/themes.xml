@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- 桌面主主题：深色、无标题栏、透明状态栏，横屏全屏铺开 -->
+    <style name="Theme.CarDesk" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:windowBackground">@color/dock_start</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <!-- 应用抽屉：全屏深色半透明（继承桌面主题，无 ActionBar） -->
+    <style name="Theme.CarDesk.Drawer" parent="Theme.CarDesk">
+        <item name="android:windowBackground">@color/drawer_bg</item>
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowAnimationStyle">@null</item>
+    </style>
+
+</resources>

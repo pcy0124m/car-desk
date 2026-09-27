@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 车辆卡：俯视示意图 + 四角占位数据（预留 OBD 接口） -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_card"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="12dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-medium"
+        android:text="车辆状态"
+        android:textColor="@color/text_primary"
+        android:textSize="15sp" />
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="110dp"
+        android:layout_marginTop="6dp">
+
+        <ImageView
+            android:layout_width="92dp"
+            android:layout_height="92dp"
+            android:layout_gravity="center"
+            android:alpha="0.92"
+            android:src="@drawable/ic_car" />
+
+        <!-- 四个角占位数据（胎压/温度等，接入 OBD 后替换） -->
+        <TextView
+            android:id="@+id/vehFrontLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|start"
+            android:text="--"
+            android:textColor="@color/accent_orange"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/vehFrontRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top|end"
+            android:text="--"
+            android:textColor="@color/accent_orange"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/vehRearLeft"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|start"
+            android:text="--"
+            android:textColor="@color/accent_blue"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/vehRearRight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|end"
+            android:text="--"
+            android:textColor="@color/accent_blue"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </FrameLayout>
+</LinearLayout>

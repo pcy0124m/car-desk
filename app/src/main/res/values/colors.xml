@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 左侧快捷栏：深蓝→紫渐变 -->
+    <color name="dock_start">#1B2A6E</color>
+    <color name="dock_end">#4B2E83</color>
+
+    <!-- 中间卡片列：青绿→橙→蓝 三色渐变 -->
+    <color name="column_c1">#2EC4B6</color>
+    <color name="column_c2">#FF9F45</color>
+    <color name="column_c3">#4A9FE8</color>
+
+    <!-- 卡片/悬浮面板：白色半透明（毛玻璃感） -->
+    <color name="glass_card">#F0FFFFFF</color>
+    <color name="glass_strong">#FAFFFFFF</color>
+    <color name="glass_border">#66FFFFFF</color>
+
+    <!-- 强调色：蓝 / 橙 / 绿 三色点缀 -->
+    <color name="accent_blue">#3B82F6</color>
+    <color name="accent_orange">#F59E0B</color>
+    <color name="accent_green">#22C55E</color>
+
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_on_dark">#FFFFFF</color>
+    <color name="drawer_bg">#CC000000</color>
+</resources>

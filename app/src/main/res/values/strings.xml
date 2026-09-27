@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">车机桌面</string>
+    <string name="drawer_title">全部应用</string>
+    <string name="search_dest_hint">搜索目的地</string>
+    <string name="not_playing">未在播放</string>
+    <string name="set_home">设置家</string>
+    <string name="set_company">设置公司</string>
+    <string name="pick_app">选择应用</string>
+    <string name="pick_music_app">选择音乐应用</string>
+    <string name="pick_map_app">选择地图应用</string>
+    <string name="unbind">解除绑定</string>
+    <string name="long_press_hint">长按卡片可更换应用</string>
+    <string name="map_key_missing">高德 Key 未配置\n请按 README 申请后填入 gradle.properties</string>
+</resources>

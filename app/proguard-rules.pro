@@ -1,0 +1,15 @@
+# 高德地图 SDK 混淆规则（官方推荐）
+-keep class com.amap.api.maps.**{*;}
+-keep class com.autonavi.amap.mapcore.**{*;}
+-keep class com.amap.api.trace.**{*;}
+-keep class com.amap.api.location.**{*;}
+-keep class com.autonavi.aps.amapapi.model.**{*;}
+-keep class com.amap.api.fence.**{*;}
+-keep class com.autonavi.aps.amapapi.location.**{*;}
+-keep class com.amap.api.maps.model.**{*;}
+-keep class com.amap.api.services.**{*;}
+-keep class com.autonavi.amap.mapcore.VirtualEarthProjection.**{*;}
+-dontwarn com.amap.api.**
+-dontwarn com.autonavi.aps.amapapi.**
+-dontwarn com.autonavi.amap.mapcore.**
+-dontwarn org.eclipse.**

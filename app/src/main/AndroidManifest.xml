@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- 高德地图/定位所需权限 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 读取媒体播放状态（音乐卡片显示当前曲目） -->
+    <uses-permission android:name="android.permission.MEDIA_CONTENT_CONTROL" />
+    <!-- 读取电量（右上角电量条） -->
+    <uses-permission android:name="android.permission.BATTERY_STATS" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.CarDesk"
+        android:usesCleartextTraffic="true"
+        tools:targetApi="34">
+
+        <!-- 高德地图 Key（值由 gradle.properties 注入） -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="${AMAP_KEY}" />
+
+        <!-- 桌面主界面：横屏车机桌面 -->
+        <activity
+            android:name=".MainActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="true"
+            android:screenOrientation="landscape"
+            android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 应用抽屉：半透明全屏网格 -->
+        <activity
+            android:name=".drawer.AppDrawerActivity"
+            android:configChanges="orientation|screenSize|keyboardHidden"
+            android:exported="false"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.CarDesk.Drawer" />
+    </application>
+
+</manifest>
